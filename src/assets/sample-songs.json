@@ -1,0 +1,20 @@
+[
+  {
+    "id": "s1",
+    "title": "C\u00e1ntico de ejemplo",
+    "type": "song",
+    "text": "Verso 1\\nQue alegr\u00eda cantar\\n---\\nCoro\\nAleluya aleluya\\n---\\nVerso 2\\nSeguimos adorando",
+    "uppercase": false,
+    "bgUrl": "preset:gradient",
+    "fontSize": 96
+  },
+  {
+    "id": "a1",
+    "title": "Anuncio: Reuni\u00f3n de j\u00f3venes",
+    "type": "announcement",
+    "text": "Este s\u00e1bado a las 7pm en el sal\u00f3n principal.\\nTrae un amigo!",
+    "uppercase": false,
+    "bgUrl": "preset:gradient",
+    "fontSize": 72
+  }
+]

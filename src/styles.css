@@ -1,0 +1,38 @@
+/* ============================================================
+   Variables de diseño — disponibles globalmente para todos
+   los componentes que usen var(--nombre).
+   ============================================================ */
+:root {
+  --bg-dark:       #0f172a;
+  --bg-panel:      #1e293b;
+  --bg-card:       #263548;
+  --accent:        #06b6d4;
+  --accent-hover:  #0ea5e9;
+  --danger:        #ef4444;
+  --success:       #22c55e;
+  --text-light:    #f1f5f9;
+  --text-muted:    #94a3b8;
+  --border:        #334155;
+}
+
+/* Reset mínimo global — los estilos de cada vista son scoped */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #0f172a;
+  color: #f1f5f9;
+  font-family: "Segoe UI", Inter, ui-sans-serif, system-ui, -apple-system, Roboto, sans-serif;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+}
