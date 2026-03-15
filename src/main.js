@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import App from './App.vue'
 import Editor from './views/Editor.vue'
 import Projector from './views/Projector.vue'
@@ -11,7 +11,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  // WebHashHistory funciona con file:// (Electron) y con servidor HTTP
+  history: createWebHashHistory(),
   routes
 })
 

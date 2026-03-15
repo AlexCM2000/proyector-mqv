@@ -1,19 +1,42 @@
 {
   "name": "vue-lyric-projector-ready",
   "version": "1.0.0",
+  "description": "Proyector de letras para presentaciones — MQV",
+  "author": "MQV",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev":          "vite",
+    "build":        "vite build",
+    "preview":      "vite preview",
+    "electron:dev": "npm run build && electron .",
+    "dist":         "npm run build && electron-builder --win --x64"
   },
   "dependencies": {
-    "vue": "^3.3.4",
+    "vue":        "^3.3.4",
     "vue-router": "^4.3.1"
   },
   "devDependencies": {
-    "vite": "^5.4.21",
-    "@vitejs/plugin-vue": "^5.1.0",
-    "@vue/compiler-sfc": "^3.3.4"
+    "@vitejs/plugin-vue":  "^5.1.0",
+    "@vue/compiler-sfc":  "^3.3.4",
+    "electron":           "^41.0.2",
+    "electron-builder":   "^26.8.1",
+    "vite":               "^5.4.21"
+  },
+  "build": {
+    "appId":       "com.mqv.proyector",
+    "productName": "Proyector MQV",
+    "copyright":   "MQV",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "zip",
+      "signAndEditExecutable": false
+    }
   }
 }

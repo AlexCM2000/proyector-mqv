@@ -90,9 +90,9 @@ export default {
 
   created() {
     // Detectar modo bare (?bare=1) — sin hints, pantalla limpia
-    try {
-      this.bareMode = new URLSearchParams(window.location.search).get('bare') === '1';
-    } catch (e) { this.bareMode = false; }
+    // Usamos $route.query porque con hash history los query params van dentro
+    // del hash y window.location.search queda vacío en Electron
+    this.bareMode = this.$route?.query?.bare === '1';
 
     // Restaurar fondo global
     const savedBg = loadBgPrefs();

@@ -419,8 +419,11 @@ export default {
     // ── Proyector — ventana y navegación ───────────────────────────────────
 
     openProjectorWindow() {
-      const id  = this.editSong ? this.editSong.id : '';
-      const url = window.location.origin + '/projector/' + id + '?bare=1';
+      const id   = this.editSong ? this.editSong.id : '';
+      // Construir URL compatible con hash history (browser y Electron/file://)
+      // Toma la parte antes del '#' para no duplicar el hash si ya existe
+      const base = window.location.href.split('#')[0];
+      const url  = base + '#/projector/' + id + '?bare=1';
       this.projectorWindow = window.open(url, 'lyric-projector', 'width=1280,height=720');
       this.projectorOpen   = true;
       // Polling para detectar cierre de la ventana
