@@ -13,15 +13,20 @@ function stripHtml(html) {
 /**
  * Calculates the optimal font size in px for a full-screen projector slide.
  * Accounts for viewport size and slide content length/line count.
- * Clamps result to [24, 180] px before applying the user's manual offset.
  *
- * @param {string} slideHtml      - HTML string for the current slide (may contain <br/>).
- * @param {number} [fontAdjust=0] - Manual user offset (from keyboard +/- keys).
- * @returns {number} Font size in px.
+ * Calibración contra el CSS de Projector.vue:
+ *   - .slide padding:    5vh 8vw  → availW = vw*0.84, availH = vh*0.90
+ *   - .slide-inner line-height: 1.25  → factor de altura por línea = 1.25
+ *   - font-family: Segoe UI bold → ancho promedio por carácter ≈ 0.52em
+ *   - max cap 220px: permite texto grande en slides cortos (1-3 palabras)
+ *
+ * @param {string} slideHtml      - HTML string del slide actual (puede contener <br/>).
+ * @param {number} [fontAdjust=0] - Offset manual del usuario (teclas +/-).
+ * @returns {number} Tamaño de fuente en px.
  */
 export function calcProjectorFontSize(slideHtml, fontAdjust = 0) {
   const lines = (slideHtml || '').split('<br/>').filter(Boolean);
-  if (!lines.length) return 80 + fontAdjust;
+  if (!lines.length) return 100 + fontAdjust;
 
   const cleanLines = lines.map(stripHtml);
   const maxLen  = Math.max(...cleanLines.map((l) => l.length), 1);
@@ -30,15 +35,16 @@ export function calcProjectorFontSize(slideHtml, fontAdjust = 0) {
   const vw = window.innerWidth  || 1920;
   const vh = window.innerHeight || 1080;
 
-  // Available area accounting for 8vw / 5vh padding on each side
+  // Área disponible: padding 8vw a cada lado, 5vh arriba y abajo
   const availW = vw * 0.84;
-  const availH = vh * 0.88;
+  const availH = vh * 0.90;
 
-  // Each character is ~0.58em wide; line-height is ~1.35
-  const fromWidth  = availW / (maxLen  * 0.58);
-  const fromHeight = availH / (numLines * 1.35);
+  // Segoe UI bold ≈ 0.52em por carácter; line-height real = 1.25
+  const fromWidth  = availW / (maxLen  * 0.52);
+  const fromHeight = availH / (numLines * 1.25);
 
-  const base = Math.max(24, Math.min(Math.min(fromWidth, fromHeight), 180));
+  // Mín 28px (siempre legible), máx 220px (slides de 1-2 palabras)
+  const base = Math.max(28, Math.min(Math.min(fromWidth, fromHeight), 220));
   return Math.round(base) + fontAdjust;
 }
 
