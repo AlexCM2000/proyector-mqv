@@ -2,6 +2,24 @@ const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
 /**
+ * Adjunta los atajos de teclado de recarga a una ventana.
+ * F5 y Ctrl+R recargan la ventana sin necesidad de menú visible.
+ *
+ * @param {BrowserWindow} win
+ */
+function attachReload(win) {
+  win.webContents.on('before-input-event', (event, input) => {
+    const isReload =
+      input.type === 'keyDown' &&
+      (input.key === 'F5' || (input.control && input.key === 'r'))
+    if (isReload) {
+      win.webContents.reload()
+      event.preventDefault()
+    }
+  })
+}
+
+/**
  * Crea la ventana principal del Editor.
  * La ventana del Proyector se abre desde el renderer via window.open()
  * y es interceptada por setWindowOpenHandler para configurarla correctamente.
@@ -23,6 +41,9 @@ function createWindow() {
   // Cargar el build de Vite (dist/index.html con rutas relativas por base: './')
   win.loadFile(path.join(__dirname, '../dist/index.html'))
 
+  // F5 o Ctrl+R recargan la ventana del editor
+  attachReload(win)
+
   /**
    * Permitir que el renderer abra la ventana del Proyector con window.open().
    * Sin esto, Electron bloquea todas las ventanas abiertas desde el renderer.
@@ -42,6 +63,11 @@ function createWindow() {
         },
       },
     }
+  })
+
+  // F5 o Ctrl+R también recargan la ventana del proyector cuando se crea
+  win.webContents.on('did-create-window', (childWin) => {
+    attachReload(childWin)
   })
 }
 
