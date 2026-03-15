@@ -316,6 +316,13 @@ export default {
     },
   },
 
+  // ── Watchers ────────────────────────────────────────────────────────────────
+
+  watch: {
+    'editSong.title'() { this.filterSongs(); },
+    'editSong.text'()  { this.filterSongs(); },
+  },
+
   // ── Métodos ────────────────────────────────────────────────────────────────
 
   methods: {
@@ -323,10 +330,14 @@ export default {
     // ── Gestión de canciones ────────────────────────────────────────────────
 
     filterSongs() {
+      // Merge unsaved editSong changes so the search reflects live edits
+      const songsView = this.editSong
+        ? this.songs.map((s) => (s.id === this.editSong.id ? this.editSong : s))
+        : this.songs;
       const q = this.searchQuery.toLowerCase().trim();
-      if (!q) { this.filteredSongs = this.songs.slice(0, 10); return; }
+      if (!q) { this.filteredSongs = songsView.slice(0, 10); return; }
       const results = [];
-      for (const song of this.songs) {
+      for (const song of songsView) {
         if (
           (song.title || '').toLowerCase().includes(q) ||
           (song.text  || '').toLowerCase().includes(q)
