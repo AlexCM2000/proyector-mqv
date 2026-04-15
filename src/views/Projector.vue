@@ -441,7 +441,7 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
-  padding: 5vh 8vw;
+  padding: 2vh 4vw;
   box-sizing: border-box;
   position: absolute;
 }

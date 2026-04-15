@@ -14,10 +14,10 @@ function stripHtml(html) {
  * Calculates the optimal font size in px for a single projector slide.
  *
  * Calibración contra el CSS de Projector.vue:
- *   - .slide padding:          5vh 8vw  → availW = vw*0.84, availH = vh*0.88
+ *   - .slide padding:          2vh 4vw  → availW = vw*0.92, availH = vh*0.96
  *   - .slide-inner line-height: 1.25
- *   - font-family: Segoe UI bold → ancho promedio por carácter ≈ 0.58em
- *   - cap: 190px (evita texto desproporcionado en slides de 1-2 palabras)
+ *   - font-family: Segoe UI bold → ancho promedio por carácter ≈ 0.55em
+ *   - cap: 240px (permite tamaño máximo en slides cortos)
  *
  * @param {string} slideHtml      - HTML del slide (puede contener <br/>).
  * @param {number} [fontAdjust=0] - Offset manual del usuario (teclas +/-).
@@ -34,16 +34,16 @@ export function calcProjectorFontSize(slideHtml, fontAdjust = 0) {
   const vw = window.innerWidth  || 1920;
   const vh = window.innerHeight || 1080;
 
-  // Área útil descontando padding del .slide (8vw c/lado, 5vh c/lado + margen extra)
-  const availW = vw * 0.84;
-  const availH = vh * 0.88;
+  // Área útil descontando padding del .slide (4vw c/lado, 2vh c/lado)
+  const availW = vw * 0.92;
+  const availH = vh * 0.96;
 
-  // Segoe UI Bold ≈ 0.58em por carácter; line-height 1.25 coincide con CSS
-  const fromWidth  = availW / (maxLen  * 0.58);
+  // Segoe UI Bold ≈ 0.55em por carácter; line-height 1.25 coincide con CSS
+  const fromWidth  = availW / (maxLen  * 0.55);
   const fromHeight = availH / (numLines * 1.25);
 
-  // Mín 24px (siempre legible), máx 190px (slides de 1-2 palabras)
-  const base = Math.max(24, Math.min(Math.min(fromWidth, fromHeight), 190));
+  // Mín 28px (siempre legible desde lejos), máx 240px
+  const base = Math.max(28, Math.min(Math.min(fromWidth, fromHeight), 240));
   return Math.round(base) + fontAdjust;
 }
 
