@@ -21,7 +21,7 @@
         <div
           class="slide"
           :key="index"
-          :style="{ fontSize: slideFont(slides[index]) + 'px' }"
+          :style="{ fontSize: (slideFontSizes[index] || 80) + 'px' }"
         >
           <div class="slide-inner" v-html="slides[index]"></div>
         </div>
@@ -53,7 +53,7 @@
 <script>
 // Utilidades puras
 import { parseSlides, slideToHtml }   from '../utils/slideParser.js';
-import { calcProjectorFontSize }      from '../utils/fontSizer.js';
+import { calcSongFontSizes }          from '../utils/fontSizer.js';
 
 // Servicios de persistencia
 import { loadSongs }                  from '../services/songStorage.js';
@@ -226,6 +226,15 @@ export default {
   // ── Computadas ─────────────────────────────────────────────────────────────
 
   computed: {
+
+    /**
+     * Tamaños de fuente por slide con suavizado anti-saltos.
+     * Recalcula cuando cambia slides[], fontAdjust, o el índice activo.
+     */
+    slideFontSizes() {
+      return calcSongFontSizes(this.slides, this.fontAdjust);
+    },
+
     bgStyle() {
       if (this.blackoutMode) return { background: '#000' };
       const { mode } = this.globalBg;
@@ -251,16 +260,6 @@ export default {
         if (this.bgVideoUrl) URL.revokeObjectURL(this.bgVideoUrl);
         this.bgVideoUrl = URL.createObjectURL(new Blob([buffer], { type: 'video/mp4' }));
       }).catch(() => {});
-    },
-
-    // ── Tipografía automática ──────────────────────────────────────────────
-
-    /**
-     * Calcula el tamaño de fuente óptimo para el slide visible en pantalla.
-     * Delega en fontSizer.js pasando el offset manual del usuario.
-     */
-    slideFont(slideHtml) {
-      return calcProjectorFontSize(slideHtml, this.fontAdjust);
     },
 
     // ── Gestión de canción activa ───────────────────────────────────────────
